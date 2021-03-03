@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pengaduan extends CI_Controller
 {
@@ -18,11 +18,11 @@ class Pengaduan extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['pengaduan'] = $this->pengaduan->getAllDataPengaduan()->result_array();
 
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/admin_sidebar');
-      $this->load->view('templates/topbar', $data);
-      $this->load->view('pengaduan/index', $data);
-      $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/admin_sidebar');
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('pengaduan/index', $data);
+    $this->load->view('templates/footer');
   }
 
   public function detail($id)
@@ -32,11 +32,11 @@ class Pengaduan extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['keluhan'] = $this->keluhan->getKeluhanById($id);
 
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/admin_sidebar', $data);
-      $this->load->view('templates/topbar', $data);
-      $this->load->view('pengaduan/detail', $data);
-      $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/admin_sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('pengaduan/detail', $data);
+    $this->load->view('templates/footer');
   }
 
   public function ubah($id)
@@ -45,17 +45,35 @@ class Pengaduan extends CI_Controller
     $proses = 'proses';
     $selesai = 'selesai';
 
-      if ($keluhan['status'] == 'proses') {
-        $this->db->set('status', $selesai);
-        $this->db->where('id_pengaduan', $id);
-        $this->db->update('pengaduan');
-        redirect('pengaduan');
-      }else {
-        $this->db->set('status', $proses);
-        $this->db->where('id_pengaduan', $id);
-        $this->db->update('pengaduan');
-        redirect('pengaduan');
-      }
+    if ($keluhan['status'] == 'proses') {
+      $this->db->set('status', $selesai);
+      $this->db->where('id_pengaduan', $id);
+      $this->db->update('pengaduan');
+      $this->session->set_flashdata(
+        'pesan',
+        '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        Status pengaduan berhasil diubah!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>'
+      );
+      redirect('pengaduan');
+    } else {
+      $this->db->set('status', $proses);
+      $this->db->where('id_pengaduan', $id);
+      $this->db->update('pengaduan');
+      $this->session->set_flashdata(
+        'pesan',
+        '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        Status pengaduan berhasil diubah!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>'
+      );
+      redirect('pengaduan');
+    }
   }
 
   public function pdf()
@@ -78,8 +96,8 @@ class Pengaduan extends CI_Controller
   public function excel()
   {
     $data['pengaduan'] = $this->pengaduan->getAllDataPengaduan()->result_array();
-    require(APPPATH. 'PHPExcel-1.8/Classes/PHPExcel.php');
-    require(APPPATH. 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
+    require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel.php');
+    require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
 
     $object = new PHPExcel();
 
@@ -99,24 +117,24 @@ class Pengaduan extends CI_Controller
     $no = 1;
 
     foreach ($data['pengaduan'] as $p) {
-      $object->getActiveSheet()->setCellValue('A'.$baris, $no++);
-      $object->getActiveSheet()->setCellValue('B'.$baris, $p['nama']);
-      $object->getActiveSheet()->setCellValue('C'.$baris, $p['isi_laporan']);
-      $object->getActiveSheet()->setCellValue('D'.$baris, $p['tgl_pengaduan']);
-      $object->getActiveSheet()->setCellValue('E'.$baris, $p['status']);
+      $object->getActiveSheet()->setCellValue('A' . $baris, $no++);
+      $object->getActiveSheet()->setCellValue('B' . $baris, $p['nama']);
+      $object->getActiveSheet()->setCellValue('C' . $baris, $p['isi_laporan']);
+      $object->getActiveSheet()->setCellValue('D' . $baris, $p['tgl_pengaduan']);
+      $object->getActiveSheet()->setCellValue('E' . $baris, $p['status']);
 
       $baris++;
     }
 
-    $filename = "Data_Pengaduan".'.xlsx';
+    $filename = "Data_Pengaduan" . '.xlsx';
 
     $object->getActiveSheet()->setTitle("DATA PENGADUAN");
 
     header('Content-Type: application/vnd.openxmplformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="'.$filename.'"');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
     header('Cache-Control: max-age=0');
 
-    $writer=PHPExcel_IOFactory::createwriter($object, 'Excel2007');
+    $writer = PHPExcel_IOFactory::createwriter($object, 'Excel2007');
     $writer->save('php://output');
 
     exit;
@@ -129,11 +147,11 @@ class Pengaduan extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['pengaduan'] = $this->pengaduan->getAllDataPengaduan()->result_array();
 
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/petugas_sidebar');
-      $this->load->view('templates/topbar', $data);
-      $this->load->view('pengaduan/petugas_keluhan', $data);
-      $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/petugas_sidebar');
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('pengaduan/petugas_keluhan', $data);
+    $this->load->view('templates/footer');
   }
 
   public function detailPetugas($id)
@@ -143,10 +161,10 @@ class Pengaduan extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['keluhan'] = $this->keluhan->getKeluhanById($id);
 
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/petugas_sidebar', $data);
-      $this->load->view('templates/topbar', $data);
-      $this->load->view('pengaduan/detailPetugas', $data);
-      $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/petugas_sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('pengaduan/detailPetugas', $data);
+    $this->load->view('templates/footer');
   }
 }

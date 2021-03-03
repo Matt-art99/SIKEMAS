@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Penduduk extends CI_Controller
 {
@@ -10,7 +10,7 @@ class Penduduk extends CI_Controller
     $this->load->model('Penduduk_model', 'penduduk');
   }
 
-// Tampilan data penduduk Admin
+  // Tampilan data penduduk Admin
   public function index()
   {
     $data['penduduk'] = $this->db->get('masyarakat')->result_array();
@@ -18,11 +18,11 @@ class Penduduk extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['judul'] = 'Halaman Data Penduduk';
 
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/admin_sidebar', $data);
-      $this->load->view('templates/topbar', $data);
-      $this->load->view('penduduk/index', $data);
-      $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/admin_sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('penduduk/index', $data);
+    $this->load->view('templates/footer');
   }
 
   public function tambah()
@@ -30,29 +30,41 @@ class Penduduk extends CI_Controller
     $data['penduduk'] = $this->db->get('masyarakat')->result_array();
     $data['judul'] = 'Halaman Data Keluhan';
 
-    $this->form_validation->set_rules('nik', 'NIK', 'required|trim|numeric|min_length[16]',
-    [
-      'required' => 'Kolom NIK harus diisi!',
-      'numeric' => 'Kolom NIK harus berupa angka!',
-      'min_length' => 'NIK harus terdiri dari 16 angka!'
-    ]);
-    $this->form_validation->set_rules('nama', 'Nama', 'required|trim',
-    [
-      'required' => 'Kolom Nama harus diisi!',
-    ]);
-    $this->form_validation->set_rules('telp', 'Telp', 'required|trim|max_length[13]',
-    [
-      'required' => 'Kolom No telp. harus diisi!',
-      'max_length' => 'No telepon maksimal 13 karakter!'
-    ]);
+    $this->form_validation->set_rules(
+      'nik',
+      'NIK',
+      'required|trim|numeric|min_length[16]',
+      [
+        'required' => 'Kolom NIK harus diisi!',
+        'numeric' => 'Kolom NIK harus berupa angka!',
+        'min_length' => 'NIK harus terdiri dari 16 angka!'
+      ]
+    );
+    $this->form_validation->set_rules(
+      'nama',
+      'Nama',
+      'required|trim',
+      [
+        'required' => 'Kolom Nama harus diisi!',
+      ]
+    );
+    $this->form_validation->set_rules(
+      'telp',
+      'Telp',
+      'required|trim|max_length[13]',
+      [
+        'required' => 'Kolom No telp. harus diisi!',
+        'max_length' => 'No telepon maksimal 13 karakter!'
+      ]
+    );
 
-    if($this->form_validation->run() == false){
+    if ($this->form_validation->run() == false) {
       $this->load->view('templates/header', $data);
       $this->load->view('templates/admin_sidebar');
       $this->load->view('templates/topbar');
       $this->load->view('penduduk/index', $data);
       $this->load->view('templates/footer');
-    }else {
+    } else {
       $this->penduduk->tambahDataPenduduk();
     }
   }
@@ -64,29 +76,41 @@ class Penduduk extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['judul'] = 'Halaman Data Keluhan';
 
-    $this->form_validation->set_rules('nik', 'NIK', 'required|trim|numeric|min_length[16]',
-    [
-      'required' => 'Kolom NIK harus diisi!',
-      'numeric' => 'Kolom NIK harus berupa angka!',
-      'min_length' => 'NIK harus terdiri dari 16 angka!'
-    ]);
-    $this->form_validation->set_rules('nama', 'Nama', 'required|trim',
-    [
-      'required' => 'Kolom Nama harus diisi!',
-    ]);
-    $this->form_validation->set_rules('telp', 'Telp', 'required|trim|max_length[13]',
-    [
-      'required' => 'Kolom No telp. harus diisi!',
-      'max_length' => 'No telepon maksimal 13 karakter!'
-    ]);
+    $this->form_validation->set_rules(
+      'nik',
+      'NIK',
+      'required|trim|numeric|min_length[16]',
+      [
+        'required' => 'Kolom NIK harus diisi!',
+        'numeric' => 'Kolom NIK harus berupa angka!',
+        'min_length' => 'NIK harus terdiri dari 16 angka!'
+      ]
+    );
+    $this->form_validation->set_rules(
+      'nama',
+      'Nama',
+      'required|trim',
+      [
+        'required' => 'Kolom Nama harus diisi!',
+      ]
+    );
+    $this->form_validation->set_rules(
+      'telp',
+      'Telp',
+      'required|trim|max_length[13]',
+      [
+        'required' => 'Kolom No telp. harus diisi!',
+        'max_length' => 'No telepon maksimal 13 karakter!'
+      ]
+    );
 
-    if($this->form_validation->run() == false){
+    if ($this->form_validation->run() == false) {
       $this->load->view('templates/header', $data);
       $this->load->view('templates/admin_sidebar', $data);
       $this->load->view('templates/topbar', $data);
       $this->load->view('penduduk/edit', $data);
       $this->load->view('templates/footer');
-    }else {
+    } else {
       $this->penduduk->editDataPenduduk($nik);
     }
   }
@@ -116,8 +140,8 @@ class Penduduk extends CI_Controller
   public function excel()
   {
     $data['penduduk'] = $this->db->get('masyarakat')->result_array();
-    require(APPPATH. 'PHPExcel-1.8/Classes/PHPExcel.php');
-    require(APPPATH. 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
+    require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel.php');
+    require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
 
     $object = new PHPExcel();
 
@@ -136,23 +160,23 @@ class Penduduk extends CI_Controller
     $no = 1;
 
     foreach ($data['penduduk'] as $p) {
-      $object->getActiveSheet()->setCellValue('A'.$baris, $no++);
-      $object->getActiveSheet()->setCellValue('B'.$baris, $p['nik']);
-      $object->getActiveSheet()->setCellValue('C'.$baris, $p['nama']);
-      $object->getActiveSheet()->setCellValue('D'.$baris, $p['telp']);
+      $object->getActiveSheet()->setCellValue('A' . $baris, $no++);
+      $object->getActiveSheet()->setCellValue('B' . $baris, $p['nik']);
+      $object->getActiveSheet()->setCellValue('C' . $baris, $p['nama']);
+      $object->getActiveSheet()->setCellValue('D' . $baris, $p['telp']);
 
       $baris++;
     }
 
-    $filename = "Data_Penduduk".'.xlsx';
+    $filename = "Data_Penduduk" . '.xlsx';
 
     $object->getActiveSheet()->setTitle("DATA PENDUDUK");
 
     header('Content-Type: application/vnd.openxmplformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="'.$filename.'"');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
     header('Cache-Control: max-age=0');
 
-    $writer=PHPExcel_IOFactory::createwriter($object, 'Excel2007');
+    $writer = PHPExcel_IOFactory::createwriter($object, 'Excel2007');
     $writer->save('php://output');
 
     exit;
@@ -165,10 +189,10 @@ class Penduduk extends CI_Controller
     $data['petugas'] = $this->db->get_where('petugas', ['username' => $this->session->userdata('admin')])->row_array();
     $data['judul'] = 'Halaman Data Penduduk';
 
-      $this->load->view('templates/header', $data);
-      $this->load->view('templates/petugas_sidebar', $data);
-      $this->load->view('templates/topbar', $data);
-      $this->load->view('penduduk/petugas_penduduk', $data);
-      $this->load->view('templates/footer');
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/petugas_sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('penduduk/petugas_penduduk', $data);
+    $this->load->view('templates/footer');
   }
 }

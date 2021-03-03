@@ -12,7 +12,7 @@
               <div class="text-center">
                 <i class="fas fa-cube fa-4x mb-2 text-primary"></i>
                 <h1 class="h4 text-primary text-center mb-4">Selamat Datang di Sistem Informasi Keluhan Masyarakat</h1>
-                <div class="logout" data-logout="<?= $this->session->flashdata('pesan'); ?>"></div>
+                <?= $this->session->flashdata('pesan'); ?>
               </div>
               <form method="post" action="<?= base_url('auth'); ?>">
                 <div class="form-group">
